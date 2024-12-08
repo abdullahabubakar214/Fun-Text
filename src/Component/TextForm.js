@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function TextArea(props) {
   const [text, setText] = useState("Enter your text here");
+  const [picture, setPicture] = useState(null);
 
   const convertToFunny = () => {
     let newText = "Kesa Laga Mera Mazaq......";
@@ -61,12 +62,21 @@ export default function TextArea(props) {
       });
   };
 
+  const handleAddPicture = (event) => {
+    const file = event.target.files[0];
+    setPicture(URL.createObjectURL(file));
+  };
+
+  const handleDeletePicture = () => {
+    setPicture(null);
+  };
+
   return (
     <>
       <div className="container" style={{ color: props.mode === 'black' ? 'white' : 'black', display: 'flex', flexDirection: 'column' }}>
         <h1 className="mb-4">{props.heading}</h1>
         <div className="mb-3">
-        <textarea
+          <textarea
             className="form-control"
             onChange={handleOnChange}
             name="myBox"
@@ -77,6 +87,17 @@ export default function TextArea(props) {
             style={{ backgroundColor: props.mode === 'black' ? '#304263' : '#ebeaea', color: props.mode === 'black' ? 'white' : 'black' }}
           ></textarea>
         </div>
+
+        <div>
+          <input class="btn btn-primary mx-2 my-2" type="file" accept="image/*" onChange={handleAddPicture} />
+          {picture && (
+            <div>
+              <img src={picture} alt="Uploaded" style={{ maxWidth: '200px', maxHeight: '200px' }} />
+              <button class="btn btn-primary mx-2 my-2" onClick={handleDeletePicture}>Delete Picture</button>
+            </div>
+          )}
+        </div>
+
         <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
           <button type="submit" className="btn btn-primary mx-2 my-2" onClick={handleOnClick}>
             Convert to Uppercase
@@ -111,10 +132,20 @@ export default function TextArea(props) {
           Your text contains {text.split(" ").length} words and {text.length} characters
         </p>
         <p>{0.008 * text.split(" ").length} minutes to read the text</p>
-
-        <h2>Preview</h2>
-        <p>{text.length > 0 ? text : "Enter something above to preview here..."}</p>
       </div>
+
+      <div className='container my-4' style={{ color: props.mode === 'black' ? 'white' : 'black' }}>
+        <h2>Preview</h2>
+        {text.length > 0 || picture ? (
+          <>
+            <p>{text.length > 0 ? text : "Enter something above to preview here..."}</p>
+            {picture && <img src={picture} alt="Preview" style={{ maxWidth: '200px', maxHeight: '200px' }} />}
+          </>
+        ) : (
+          <p>Enter something above to preview here...</p>
+        )}
+      </div>
+
     </>
   );
 }

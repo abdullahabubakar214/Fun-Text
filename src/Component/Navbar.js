@@ -25,6 +25,7 @@ function Navbar(props) {
                                 Home
                             </a>
                         </li>
+                    
                     </ul>
                 </div>
                 <div className={`form-check form-switch text-${props.mode === 'light' ? 'dark' : 'light'}`}>
